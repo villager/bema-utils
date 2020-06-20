@@ -7,9 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/villager/bema-utils.git"
   },
-  "scripts": {
-    "tsc": "tsc"
-  },
   "keywords": [
     "bema",
     "plugins",
@@ -28,5 +25,8 @@
   "dependencies": {
     "sucrase": "^3.15.0",
     "typescript": "^3.9.5"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.13"
   }
 }

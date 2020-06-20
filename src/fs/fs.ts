@@ -8,13 +8,12 @@
  * @license MIT
  */
 
-/* eslint-disable */
+import * as PATH_MODULE from 'path';
+import * as FILE_SYSTEM from 'fs';
+import * as FILE_PROMISE from 'fs/promises';
 
-import * as pathModule from 'path';
-import * as fs from 'fs';
 
-
-const ROOT_PATH = pathModule.resolve(__dirname, '..');
+const ROOT_PATH = PATH_MODULE.resolve(__dirname, '..');
 
 /*eslint no-unused-expressions: ["error", { "allowTernary": true }]*/
 
@@ -24,58 +23,63 @@ class FSPath {
 	 */
 	path: string;
 	constructor(path) {
-		this.path = pathModule.resolve(ROOT_PATH, path);
+		this.path = PATH_MODULE.resolve(ROOT_PATH, path);
 	}
 	parentDir() {
-		return new FSPath(pathModule.dirname(this.path));
+		return new FSPath(PATH_MODULE.dirname(this.path));
 	}
 	async isFile() {
-		return new Promise((resolve, reject) => {
-			fs.stat(this.path, (err, stats) => {
-				err ? reject(err) : resolve(stats.isFile());
-			});
-		});
+        try {
+            return (await this.stat()).isFile();
+        } catch(e) {
+            return e;
+        }
 	}
-
+    async stat() {
+        try {
+            return await FILE_PROMISE.stat(this.path);
+        } catch(e) {
+            return e;
+        }
+    }
+    async isDirectory() {
+        try {
+            return (await this.stat()).isDirectory();
+        } catch(e) {
+            return e;
+        }
+	}
 	isFileSync() {
-		return fs.statSync(this.path).isFile();
-	}
-
-	async isDirectory() {
-		return new Promise((resolve, reject) => {
-			fs.stat(this.path, (err, stats) => {
-				err ? reject(err) : resolve(stats.isDirectory());
-			});
-		});
+		return FILE_SYSTEM.statSync(this.path).isFile();
 	}
 
 	isDirectorySync() {
-		return fs.statSync(this.path).isDirectory();
+		return FILE_SYSTEM.statSync(this.path).isDirectory();
 	}
-	read(/** @type {AnyObject | string} */ options = {}) {
-		return new Promise((resolve, reject) => {
-			fs.readFile(this.path, options, (err, data) => {
-				err ? reject(err) : resolve(data);
-			});
-		});
+	async read(/** @type {AnyObject | string} */ options = {}) {
+        try {
+            return await FILE_PROMISE.readFile(this.path, options);
+        } catch(e) {
+            return e;
+        }
 	}
 	readSync(/** @type {AnyObject | string} */ options = {}) {
-		return fs.readFileSync(this.path, options);
+		return FILE_SYSTEM.readFileSync(this.path, options);
 	}
 	/**
 	 * @return {Promise<string>}
 	 */
-	readTextIfExists() {
-		return new Promise((resolve, reject) => {
-			fs.readFile(this.path, 'utf8', (err, data) => {
-				if (err && err.code === 'ENOENT') return resolve('');
-				err ? reject(err) : resolve(data);
-			});
-		});
+	async readExists() {
+        try {
+            return await FILE_PROMISE.readFile(this.path, 'utf-8');
+        } catch(e) {
+            if (e && e.code === 'ENOENT') return '';
+            return e;
+        }
 	}
-	readTextIfExistsSync() {
+	readExistsSync() {
 		try {
-			return fs.readFileSync(this.path, 'utf8');
+			return FILE_SYSTEM.readFileSync(this.path, 'utf8');
 		} catch (err) {
 			if (err.code !== 'ENOENT') throw err;
 		}
@@ -85,19 +89,19 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	write(data, options = {}) {
-		return new Promise((resolve, reject) => {
-			fs.writeFile(this.path, data, options, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+	async write(data, options = {}) {
+        try {
+            return await FILE_PROMISE.writeFile(this.path, data, options);
+        } catch(e) {
+            return e;
+        }
 	}
 	/**
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
 	writeSync(data, options = {}) {
-		return fs.writeFileSync(this.path, data, options);
+		return FILE_SYSTEM.writeFileSync(this.path, data, options);
 	}
 	/**
 	 * Writes to a new file before renaming to replace an old file. If
@@ -165,87 +169,86 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	append(data, options = {}) {
-		return new Promise((resolve, reject) => {
-			fs.appendFile(this.path, data, options, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+	async append(data, options = {}) {
+        try {
+            return await FILE_PROMISE.appendFile(this.path, data, options);
+        } catch(e) {
+            return e;
+        }
 	}
 	/**
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
 	appendSync(data, options = {}) {
-		return fs.appendFileSync(this.path, data, options);
+		return FILE_SYSTEM.appendFileSync(this.path, data, options);
 	}
 	/**
 	 * @param {string} target
 	 */
-	symlinkTo(target) {
-		return new Promise((resolve, reject) => {
-			// @ts-ignore TypeScript bug
-			fs.symlink(target, this.path, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+	async symlinkTo(target) {
+        try {
+            return await FILE_PROMISE.symlink(target, this.path);
+        } catch(e) {
+            return e;
+        }
 	}
 	/**
 	 * @param {string} target
 	 */
 	symlinkToSync(target) {
-		return fs.symlinkSync(target, this.path);
+		return FILE_SYSTEM.symlinkSync(target, this.path);
 	}
 	/**
 	 * @param {string} target
 	 */
-	rename(target) {
-		return new Promise((resolve, reject) => {
-			fs.rename(this.path, target, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+	async rename(target) {
+        try {
+            return await FILE_PROMISE.rename(this.path, target);
+        } catch(e) {
+            return e;
+        }
 	}
 	/**
 	 * @param {string} target
 	 */
 	renameSync(target) {
-		return fs.renameSync(this.path, target);
+		return FILE_SYSTEM.renameSync(this.path, target);
 	}
-	readdir() {
-		return new Promise((resolve, reject) => {
-			fs.readdir(this.path, (err, data) => {
-				err ? reject(err) : resolve(data);
-			});
-		});
+	async readdir() {
+        try {
+            return await FILE_PROMISE.readdir(this.path);
+        } catch(e) {
+            return e;
+        }
 	}
 	readdirSync() {
-		return fs.readdirSync(this.path);
+		return FILE_SYSTEM.readdirSync(this.path);
 	}
 	/**
 	 * @return {NodeJS.WritableStream}
 	 */
 	createWriteStream(options = {}) {
-		return fs.createWriteStream(this.path, options);
+		return FILE_SYSTEM.createWriteStream(this.path, options);
 	}
 	/**
 	 * @return {NodeJS.WritableStream}
 	 */
 	createAppendStream(options: AnyObject = {}) {
 		options.flags = options.flags || 'a';
-		return fs.createWriteStream(this.path, options);
+		return FILE_SYSTEM.createWriteStream(this.path, options);
 	}
-	unlinkIfExists() {
-		return new Promise((resolve, reject) => {
-			fs.unlink(this.path, err => {
-				if (err && err.code === 'ENOENT') return resolve();
-				err ? reject(err) : resolve();
-			});
-		});
+	async unlinkIfExists() {
+        try {
+            return await FILE_PROMISE.unlink(this.path);
+        } catch(e) {
+            if (e.code === 'ENOENT') return '';
+            return e;
+        }
 	}
 	unlinkIfExistsSync() {
 		try {
-			fs.unlinkSync(this.path);
+			FILE_SYSTEM.unlinkSync(this.path);
 		} catch (err) {
 			if (err.code !== 'ENOENT') throw err;
 		}
@@ -253,40 +256,36 @@ class FSPath {
 	/**
 	 * @param {string | number} mode
 	 */
-	mkdir(mode = 0o755) {
-		return new Promise((resolve, reject) => {
-			// @ts-ignore
-			fs.mkdir(this.path, mode, err => {
-				err ? reject(err) : resolve();
-			});
-		});
+	async mkdir(mode = 0o755) {
+        try {
+            return await FILE_PROMISE.mkdir(this.path, mode);
+        } catch(e) {
+            return e;
+        }
 	}
 	/**
 	 * @param {string | number} mode
 	 */
 	mkdirSync(mode = 0o755) {
-		// @ts-ignore
-		return fs.mkdirSync(this.path, mode);
+		return FILE_SYSTEM.mkdirSync(this.path, mode);
 	}
 	/**
 	 * @param {string | number} mode
 	 */
-	mkdirIfNonexistent(mode = 0o755) {
-		return new Promise((resolve, reject) => {
-			// @ts-ignore
-			fs.mkdir(this.path, mode, err => {
-				if (err && err.code === 'EEXIST') return resolve();
-				err ? reject(err) : resolve();
-			});
-		});
+	async mkdirIfNonexistent(mode = 0o755) {
+        try {
+            return await FILE_PROMISE.mkdir(this.path, mode);
+        } catch(e) {
+            if (e.code === 'EEXIST') return '';
+            return e;
+        }
 	}
 	/**
 	 * @param {string | number} mode
 	 */
 	mkdirIfNonexistentSync(mode = 0o755) {
 		try {
-			// @ts-ignore
-			fs.mkdirSync(this.path, mode);
+			FILE_SYSTEM.mkdirSync(this.path, mode);
 		} catch (err) {
 			if (err.code !== 'EEXIST') throw err;
 		}
@@ -324,7 +323,7 @@ class FSPath {
 	 * @param {function (): void} callback
 	 */
 	onModify(callback) {
-		fs.watchFile(this.path, (curr, prev) => {
+		FILE_SYSTEM.watchFile(this.path, (curr, prev) => {
 			if (curr.mtime > prev.mtime) return callback();
 		});
 	}
@@ -332,7 +331,7 @@ class FSPath {
 	 * Clears callbacks added with onModify()
 	 */
 	unwatch() {
-		fs.unwatchFile(this.path);
+		FILE_SYSTEM.unwatchFile(this.path);
 	}
 }
 
@@ -349,5 +348,3 @@ export const FS = Object.assign(getFs, {
 	 */
 	pendingUpdates: new Map(),
 });
-
-/* eslint-enable */
