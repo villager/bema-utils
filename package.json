@@ -1,0 +1,32 @@
+{
+  "name": "bema-utils",
+  "version": "1.0.0",
+  "description": "Utils to use in servers, bot or stuff like that",
+  "main": "dist",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/villager/bema-utils.git"
+  },
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "keywords": [
+    "bema",
+    "plugins",
+    "utils"
+  ],
+  "author": {
+    "name": "Aldair Beltran",
+    "email": "aldairbeltran3@hotmail.com",
+    "url": "https://github.com/villager"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/villager/bema-utils/issues"
+  },
+  "homepage": "https://github.com/villager/bema-utils#readme",
+  "dependencies": {
+    "sucrase": "^3.15.0",
+    "typescript": "^3.9.5"
+  }
+}

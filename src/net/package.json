@@ -1,0 +1,12 @@
+{
+    "name": "network-utils",
+    "description": "Easy way to do request from some http/s page",
+    "version": "1.0.4",
+    "main": "net.js",
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran3@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "private": true
+}
