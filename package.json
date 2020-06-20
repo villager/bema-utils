@@ -17,6 +17,9 @@
     "email": "aldairbeltran3@hotmail.com",
     "url": "https://github.com/villager"
   },
+  "scripts": {
+    "test": "jest"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/villager/bema-utils/issues"
@@ -27,6 +30,29 @@
     "typescript": "^3.9.5"
   },
   "devDependencies": {
-    "@types/node": "^14.0.13"
+    "@types/jest": "^26.0.0",
+    "@types/node": "^14.0.13",
+    "eslint": "^7.3.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>"
+    ],
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "node"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ]
   }
 }

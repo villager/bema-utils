@@ -10,6 +10,11 @@ import * as https from 'https';
 import * as http from 'http';
 import * as url from 'url';
 
+export const description = 'Easy way to do request from some http/s page';
+
+interface AnyObject {
+	[k: string]: any
+}
 export class Net {
 	url: string;
 	readonly protocol: string

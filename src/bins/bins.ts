@@ -8,7 +8,7 @@
 
 const WHITE_LIST = ['https://hastebin.com', 'https://pastie.io'];
 
-import {UtilNetwork as Net} from '../net';
+import {UtilNetwork as Net} from '../net/net';
 
 export class Bin {
     url: string;
@@ -35,8 +35,7 @@ export class Bin {
 	async download(key: string) {
         let url = this.url + key;
         try {
-            let data = await Net(url).get();
-            return data;
+            return await Net(url).get();
         } catch(e) {
             return e;
         }
@@ -48,12 +47,10 @@ export const Hastebin = new Bin(WHITE_LIST[0]);
 
 export async function upload(toUpload: string) {
     try {
-        let hasteLink = await Hastebin.upload(toUpload);
-        return hasteLink;
+        return await Hastebin.upload(toUpload);
     } catch(e) {
         try {
-            let pastieLink = await Pastie.upload(toUpload);
-            return pastieLink;
+            return await Pastie.upload(toUpload);
         } catch(e) {
             return e;
         }
@@ -61,12 +58,10 @@ export async function upload(toUpload: string) {
 }
 export async function download(key: string) {
     try {
-        let hastieDownload = await Hastebin.download(key);
-        return hastieDownload;
+        return await Hastebin.download(key);
     } catch(e) {
         try {
-            let pastieDownload = await Pastie.download(key);
-            return pastieDownload;
+            return await Pastie.download(key);
         } catch(e) {
             return e;
         }
