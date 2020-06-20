@@ -1,25 +1,25 @@
 /**
  * Utility Map Extension
- * 
+ *
  * @author Aldair Beltran
- * 
+ *
  */
-
-class UtilMap extends Map {
+interface AnyObject {[k: string]: any}
+export class UtilMap extends Map {
     toJSON() {
         return Array.from(this);
     }
     get length() {
         return this.size;
     }
-    union(data: any) {
+    union(data: any[] | AnyObject) {
         if (Array.isArray(data)) {
             for (const arg of data) {
                 if (!arg.id) continue;
                 if (!this.has(arg.id)) this.set(arg.id, arg);
             }
         } else if (typeof data === 'object') {
-            for (let i in data) {
+            for (const i in data) {
                 if (!this.has(i)) this.set(i, data[i]);
             }
         } else {
@@ -35,7 +35,7 @@ class UtilMap extends Map {
                 }
             }
         } else if (typeof data === 'object') {
-            for (let i in data) {
+            for (const i in data) {
                 if (this.has(i)) {
                     this.delete(i);
                 }

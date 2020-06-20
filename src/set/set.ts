@@ -1,37 +1,37 @@
 /**
  * Utility Set Extension
- * 
+ *
  * @author Aldair Beltran
  */
 
 export class UtilSet extends Set {
-    toJSON() : any[] {
+    toJSON(): any[] {
         return Array.from(this);
     }
 
-    get length() {
+    get length(): number {
         return this.size;
     }
 
-    merge(toAssign: any) {
-        if(Array.isArray(toAssign)) {
+    merge(toAssign: any): void {
+        if (Array.isArray(toAssign)) {
             for (const task of toAssign) {
                 this.add(task);
             }
         } else if (typeof toAssign === 'string') {
             this.add(toAssign);
         } else if (typeof toAssign === 'object') {
-            for (let i in toAssign) {
+            for (const i in toAssign) {
                 this.add(i); // Just save keys
             }
         } else {
             this.add(toAssign);
         }
     }
-    remove(key: any) {
-        return this.delete(key);
+    remove(key: any): void{
+        this.delete(key);
     }
-    difference(data: any) {
+    difference(data: any): any[] {
         if (Array.isArray(data)) {
             for (const i of data) {
                 if (this.has(i)) {
@@ -39,7 +39,7 @@ export class UtilSet extends Set {
                 }
             }
         } else if (typeof data === 'object') {
-            for (let i in data) {
+            for (const i in data) {
                 if (this.has(i)) {
                     this.remove(i);
                 }
@@ -52,37 +52,37 @@ export class UtilSet extends Set {
         return this.toJSON();
     }
 
-    intersection(data: any) {
-        let list = this.toJSON();
+    intersection(data: any): any[] {
+        const list = this.toJSON();
         if (Array.isArray(data)) {
             data = new UtilSet(data);
             list.filter(x => {
                 data.has(x);
             });
-        } else if(typeof data === 'object') {
+        } else if (typeof data === 'object') {
             data = new UtilSet(Object.values(data));
             list.filter(x => {
                 data.has(x);
             });
         } else {
-            throw Error('Invalid arg');   
+            throw Error('Invalid arg');
         }
         return list;
     }
-    difSync(data: any) {
+    difSync(data: any): any[] {
         this.union(data);
         this.dif(data);
         return this.toJSON();
     }
 
-	union(data) {
+	union(data: any): void{
 		return this.merge(data);
     }
-    
-	dif(data) {
+
+	dif(data: any): any[] {
 		return this.difference(data);
     }
-    inter(data) {
+    inter(data: any): any[] {
         return this.intersection(data);
     }
 }

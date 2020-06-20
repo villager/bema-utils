@@ -1,9 +1,9 @@
 /**
- * 
+ *
  * Bins Utility Plugin
- * 
+ *
  * @author Aldair Beltran
- * 
+ *
  */
 
 const WHITE_LIST = ['https://hastebin.com', 'https://pastie.io'];
@@ -17,26 +17,25 @@ export class Bin {
 	}
 	async upload(toUpload: string) {
         try {
-            let chunk = await Net(this.url).request({
+            const chunk = await Net(this.url).request({
                 path: '/documents',
                 data: toUpload,
             }) as string;
             try {
-                let linkStr = this.url + '/' + JSON.parse(chunk.toString())['key'];
+                const linkStr = this.url + '/' + JSON.parse(chunk.toString())['key'];
                 return linkStr;
-            } catch(e) {
-                return e;
+            } catch (err) {
+                return err;
             }
-
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
 	async download(key: string) {
-        let url = this.url + key;
+        const url = this.url + key;
         try {
             return await Net(url).get();
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
@@ -48,22 +47,22 @@ export const Hastebin = new Bin(WHITE_LIST[0]);
 export async function upload(toUpload: string) {
     try {
         return await Hastebin.upload(toUpload);
-    } catch(e) {
+    } catch (e) {
         try {
             return await Pastie.upload(toUpload);
-        } catch(e) {
-            return e;
+        } catch (err) {
+            return err;
         }
     }
 }
 export async function download(key: string) {
     try {
         return await Hastebin.download(key);
-    } catch(e) {
+    } catch (e) {
         try {
             return await Pastie.download(key);
-        } catch(e) {
-            return e;
+        } catch (err) {
+            return err;
         }
     }
 }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Utils to use in servers, bot or stuff like that",
   "main": "dist",
+  "types": "./types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/villager/bema-utils.git"
@@ -18,7 +19,9 @@
     "url": "https://github.com/villager"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint . --config .eslintrc.json --ext .js,.ts",
+    "fix": "eslint . --config .eslintrc.json --ext .js,.ts --fix"
   },
   "license": "MIT",
   "bugs": {
@@ -32,7 +35,11 @@
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
     "eslint": "^7.3.0",
+    "eslint-plugin-import": "^2.21.2",
+    "husky": "^4.2.5",
     "jest": "^26.0.1",
     "ts-jest": "^26.1.0"
   },
@@ -54,5 +61,10 @@
     "coveragePathIgnorePatterns": [
       "<rootDir>/node_modules/"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }

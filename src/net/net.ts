@@ -1,9 +1,9 @@
 /***
- * 
+ *
  * Network Utility functions
- * 
+ *
  * @author Aldair Beltran
- * 
+ *
  */
 
 import * as https from 'https';
@@ -13,17 +13,17 @@ import * as url from 'url';
 export const description = 'Easy way to do request from some http/s page';
 
 interface AnyObject {
-	[k: string]: any
+	[k: string]: any;
 }
 export class Net {
 	url: string;
-	readonly protocol: string
+	readonly protocol: string;
 	constructor(uri: string) {
 		this.url = uri;
 		this.protocol = url.parse(this.url).protocol as string;
 	}
-	get() : Promise<string|any> {
-		let net = this.protocol === 'https:' ? https : http;
+	get(): Promise<string|any> {
+		const net = this.protocol === 'https:' ? https : http;
 		return new Promise((resolve, reject) => {
 			net.get(this.url, (res: any) => {
 				res.setEncoding('utf8');
@@ -46,17 +46,17 @@ export class Net {
 	}
 	async toJSON() {
 		try {
-			let data = await this.get();
+			const data = await this.get();
 			return JSON.parse(data);
-		} catch(e) {
+		} catch (e) {
 			return e;
 		}
 	}
 	request(opts: AnyObject) {
-		let net = this.protocol === 'https:' ? https : http;
-		let actionUrl = url.parse(this.url);
-		let hostname = actionUrl.hostname;
-		let options: AnyObject = {
+		const net = this.protocol === 'https:' ? https : http;
+		const actionUrl = url.parse(this.url);
+		const hostname = actionUrl.hostname;
+		const options: AnyObject = {
 			hostname: hostname,
 			method: 'POST',
 		};
@@ -66,7 +66,7 @@ export class Net {
 		if (opts.method) options.method = opts.method;
 		return new Promise((resolve, reject) => {
 			let str = '';
-			let req = net.request(options, (res: any) => {
+			const req = net.request(options, (res: any) => {
 				res.setEncoding('utf8');
 				res.on('data', (chunk: string) => {
 					str += chunk;

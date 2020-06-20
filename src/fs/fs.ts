@@ -2,27 +2,32 @@
  * FS System
  *
  *  Based on https://github.com/smogon/pokemon-showdown/tree/master/lib/fs.ts
- * 
+ *
  * @dev Aldair Beltran
- *  
+ *
  * @license MIT
  */
 
 import * as PATH_MODULE from 'path';
 import * as FILE_SYSTEM from 'fs';
-import * as FILE_PROMISE from 'fs/promises';
+import {promises as FILE_PROMISE} from 'fs';
 
 
-const ROOT_PATH = PATH_MODULE.resolve(__dirname, '..');
+const ROOT_PATH = PATH_MODULE.resolve(__dirname, '../..');
 
-/*eslint no-unused-expressions: ["error", { "allowTernary": true }]*/
+interface AnyObject {
+    [k: string]: any;
+}
+type StringBuf = string | Buffer;
+
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }]*/
 
 class FSPath {
 	/**
 	 * @param {string} path
 	 */
 	path: string;
-	constructor(path) {
+	constructor(path: string) {
 		this.path = PATH_MODULE.resolve(ROOT_PATH, path);
 	}
 	parentDir() {
@@ -31,21 +36,21 @@ class FSPath {
 	async isFile() {
         try {
             return (await this.stat()).isFile();
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
     async stat() {
         try {
             return await FILE_PROMISE.stat(this.path);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
     }
     async isDirectory() {
         try {
             return (await this.stat()).isDirectory();
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
@@ -59,11 +64,11 @@ class FSPath {
 	async read(/** @type {AnyObject | string} */ options = {}) {
         try {
             return await FILE_PROMISE.readFile(this.path, options);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
-	readSync(/** @type {AnyObject | string} */ options = {}) {
+	readSync(/** @type {AnyObject | string} */ options: AnyObject = {}) {
 		return FILE_SYSTEM.readFileSync(this.path, options);
 	}
 	/**
@@ -72,7 +77,7 @@ class FSPath {
 	async readExists() {
         try {
             return await FILE_PROMISE.readFile(this.path, 'utf-8');
-        } catch(e) {
+        } catch (e) {
             if (e && e.code === 'ENOENT') return '';
             return e;
         }
@@ -89,10 +94,10 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	async write(data, options = {}) {
+	async write(data: StringBuf, options: AnyObject = {}) {
         try {
             return await FILE_PROMISE.writeFile(this.path, data, options);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
@@ -100,7 +105,7 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	writeSync(data, options = {}) {
+	writeSync(data: StringBuf, options = {}) {
 		return FILE_SYSTEM.writeFileSync(this.path, data, options);
 	}
 	/**
@@ -112,21 +117,21 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	async safeWrite(data, options = {}) {
-		/*eslint-disable no-use-before-define*/
+	async safeWrite(data: StringBuf, options = {}) {
+		/* eslint-disable no-use-before-define*/
 		await FS(this.path + '.NEW').write(data, options);
 		await FS(this.path + '.NEW').rename(this.path);
-		/*eslint-enable no-use-before-define*/
+		/* eslint-enable no-use-before-define*/
 	}
 	/**
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	safeWriteSync(data, options = {}) {
-		/*eslint-disable no-use-before-define*/
+	safeWriteSync(data: StringBuf, options = {}) {
+		/* eslint-disable no-use-before-define*/
 		FS(this.path + '.NEW').writeSync(data, options);
 		FS(this.path + '.NEW').renameSync(this.path);
-		/*eslint-enable no-use-before-define*/
+		/* eslint-enable no-use-before-define*/
 	}
 	/**
 	 * Safest way to update a file with in-memory state. Pass a callback
@@ -169,10 +174,10 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	async append(data, options = {}) {
+	async append(data: StringBuf, options = {}) {
         try {
             return await FILE_PROMISE.appendFile(this.path, data, options);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
@@ -180,45 +185,45 @@ class FSPath {
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
-	appendSync(data, options = {}) {
+	appendSync(data: StringBuf, options = {}) {
 		return FILE_SYSTEM.appendFileSync(this.path, data, options);
 	}
 	/**
 	 * @param {string} target
 	 */
-	async symlinkTo(target) {
+	async symlinkTo(target: string) {
         try {
             return await FILE_PROMISE.symlink(target, this.path);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
 	/**
 	 * @param {string} target
 	 */
-	symlinkToSync(target) {
+	symlinkToSync(target: string) {
 		return FILE_SYSTEM.symlinkSync(target, this.path);
 	}
 	/**
 	 * @param {string} target
 	 */
-	async rename(target) {
+	async rename(target: string) {
         try {
             return await FILE_PROMISE.rename(this.path, target);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
 	/**
 	 * @param {string} target
 	 */
-	renameSync(target) {
+	renameSync(target: string) {
 		return FILE_SYSTEM.renameSync(this.path, target);
 	}
 	async readdir() {
         try {
             return await FILE_PROMISE.readdir(this.path);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
@@ -241,7 +246,7 @@ class FSPath {
 	async unlinkIfExists() {
         try {
             return await FILE_PROMISE.unlink(this.path);
-        } catch(e) {
+        } catch (e) {
             if (e.code === 'ENOENT') return '';
             return e;
         }
@@ -259,7 +264,7 @@ class FSPath {
 	async mkdir(mode = 0o755) {
         try {
             return await FILE_PROMISE.mkdir(this.path, mode);
-        } catch(e) {
+        } catch (e) {
             return e;
         }
 	}
@@ -275,7 +280,7 @@ class FSPath {
 	async mkdirIfNonexistent(mode = 0o755) {
         try {
             return await FILE_PROMISE.mkdir(this.path, mode);
-        } catch(e) {
+        } catch (e) {
             if (e.code === 'EEXIST') return '';
             return e;
         }
@@ -322,7 +327,7 @@ class FSPath {
 	 * Calls the callback if the file is modified.
 	 * @param {function (): void} callback
 	 */
-	onModify(callback) {
+	onModify(callback: any) {
 		FILE_SYSTEM.watchFile(this.path, (curr, prev) => {
 			if (curr.mtime > prev.mtime) return callback();
 		});
@@ -338,7 +343,7 @@ class FSPath {
 /**
  * @param {string} path
  */
-function getFs(path) {
+function getFs(path: string) {
 	return new FSPath(path);
 }
 

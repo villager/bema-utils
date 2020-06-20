@@ -10,6 +10,6 @@
     "checkJs": true
   },
   "types": ["node"],
-  "include": ["./src/*"],
+  "include": ["./src/*", "./src/**/*.ts", "./__tests__/*.ts"],
   "exclude": ["./dist/*"]
 }
