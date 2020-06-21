@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const Builder = require('./builder').Builder;
+
+Builder.sucrase('./src', './lib').then(() => {
+    console.log('Data created!');
+}).catch(() => {
+    console.log('Data creation FAILED');
+})

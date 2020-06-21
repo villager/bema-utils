@@ -6,10 +6,12 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
+    "rootDirs": ["./src", "./__tests__"],
+    "outDir": "./lib/",
     "allowJs": true,
     "checkJs": true
   },
   "types": ["node"],
   "include": ["./src/*", "./src/**/*.ts", "./__tests__/*.ts"],
-  "exclude": ["./dist/*"]
+  "exclude": ["./lib/*"]
 }
