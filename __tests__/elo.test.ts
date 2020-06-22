@@ -3,7 +3,7 @@
  * based on https://github.com/dmamills/elo-rank
  */
 
-import {EloRank} from '../src/elo/elo';
+import {EloRank} from '../src/elo';
 
 describe('Elo', () => {
 	it('Create instance', () => {

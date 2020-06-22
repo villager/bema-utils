@@ -3,7 +3,7 @@
  *
  */
 
-import {Package} from '../src/package/package';
+import {Package} from '../src/package';
 
 describe('Package', () => {
     it('Exists Base', () => {

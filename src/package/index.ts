@@ -1,5 +1,5 @@
 
-import {FS} from '../fs/fs';
+import {FS} from '../fs';
 
 interface AnyObject {
     [k: string]: any;

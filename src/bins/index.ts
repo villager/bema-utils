@@ -8,7 +8,7 @@
 
 const WHITE_LIST = ['https://hastebin.com', 'https://pastie.io'];
 
-import {UtilNetwork as Net} from '../net/net';
+import {UtilNetwork as Net} from '../net';
 
 export class Bin {
     url: string;

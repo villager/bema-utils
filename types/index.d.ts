@@ -3,18 +3,19 @@
 interface AnyObject {
     [k: string]: any;
 }
-import {UtilSet as SetType} from "../src/set/set";
-import {UtilMap as MapType} from '../src/map/map';
-import {FS as FSType} from '../src/fs/fs';
-import {EloRank as EloType} from '../src/elo/elo';
+import {UtilSet as SetType} from "../src/set";
+import {UtilMap as MapType} from '../src/map';
+import {FS as FSType} from '../src/fs';
+import {EloRank as EloType} from '../src/elo';
 import {upload as upType,
     download as downType,
     Bin as BinType,
     Hastebin as HasteType,
     Pastie as PastieType,
-} from '../src/bins/bins';
-import {Package as PackageType} from '../src/package/package';
-import {UtilNetwork as NetType, Net as NetworkType} from '../src/net/net';
+} from '../src/bins';
+import {Package as PackageType} from '../src/package';
+import {UtilNetwork as NetType, Net as NetworkType} from '../src/net';
+import {EventEmitter as EventType} from '../src/events';
 
 declare module 'bema-utils' {
     export const Set: typeof SetType;
@@ -31,5 +32,6 @@ declare module 'bema-utils' {
     export const Package: typeof PackageType;
     export const Network: typeof NetworkType;
     export const Net: typeof NetType;
+    export const EventEmitter: typeof EventType;
 
 }

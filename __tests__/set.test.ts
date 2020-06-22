@@ -1,5 +1,5 @@
 
-import {UtilSet} from '../src/set/set';
+import {UtilSet} from '../src/set';
 
 const set = new UtilSet();
 

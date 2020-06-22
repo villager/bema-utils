@@ -60,10 +60,11 @@ export class Net {
 			hostname: hostname,
 			method: 'POST',
 		};
-		if (opts.header) options.header = opts.header;
-		if (opts.port) options.port = opts.port;
-		if (opts.path) options.path = opts.path;
-		if (opts.method) options.method = opts.method;
+		for (const i in opts) {
+			options[i] = opts[i];
+		}
+		if (options.data) delete options.data;
+		if (!options.hostname) options.hostname = hostname;
 		return new Promise((resolve, reject) => {
 			let str = '';
 			const req = net.request(options, (res: any) => {

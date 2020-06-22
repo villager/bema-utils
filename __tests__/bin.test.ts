@@ -2,7 +2,7 @@
  * Test Bin's Utility
  */
 
-import {Hastebin, Pastie} from '../src/bins/bins';
+import {Hastebin, Pastie} from '../src/bins';
 
 
 const text = 'This is a test';
