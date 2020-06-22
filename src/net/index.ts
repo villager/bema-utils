@@ -60,7 +60,8 @@ export class Net {
 			hostname: hostname,
 			method: 'POST',
 		};
-		for (const i in opts) {
+		// eslint-disable-next-line
+		for (let i in opts) {
 			options[i] = opts[i];
 		}
 		if (options.data) delete options.data;
