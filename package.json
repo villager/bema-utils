@@ -1,6 +1,6 @@
 {
   "name": "bema-utils",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Utils to use in servers, bot or stuff like that",
   "main": "lib",
   "types": "./types/index.d.ts",
